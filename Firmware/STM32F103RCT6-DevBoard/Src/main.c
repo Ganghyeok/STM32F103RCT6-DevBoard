@@ -19,11 +19,24 @@
 
 #include "stm32f103xx.h"
 
+
 int main(void)
 {
+	SystemClock_Config(SYSCLK_FREQ_72MHZ);		// Other SYSCLK options are available
 
+	RCC->CFGR |= RCC_CFGR_MCOSEL_SYSCLK;		// Select SYSCLK as MCO output
 
+	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;			// Clock enable GPIOA
+
+	GPIOA->CRH &= ~(0x3 << 2);					// Clear CNF field of PA8
+	GPIOA->CRH |= 0x3;							// Configure PA8 as Output mode of max speed 50MHz
+	GPIOA->CRH |= (0x1 << 3);					// Configure PA8 as Alternate Function output Push-pull
 
 
 	while(1);
 }
+
+
+
+
+
