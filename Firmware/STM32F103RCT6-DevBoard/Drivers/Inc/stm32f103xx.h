@@ -38,6 +38,7 @@
 #define FLAG_SET								SET
 #define FLAG_RESET								RESET
 
+#define UNUSED(X)								(void)X			/* To avoid gcc/g++ warnings */
 
 /**************************************************************************************************************
  * 																											  *
@@ -45,6 +46,19 @@
  * 																											  *
  **************************************************************************************************************/
 
+/* Memory mapping of Core Hardware */
+#define SCS_BASE            (0xE000E000UL)                            /*!< System Control Space Base Address */
+#define ITM_BASE            (0xE0000000UL)                            /*!< ITM Base Address */
+#define DWT_BASE            (0xE0001000UL)                            /*!< DWT Base Address */
+#define TPI_BASE            (0xE0040000UL)                            /*!< TPI Base Address */
+#define CoreDebug_BASE      (0xE000EDF0UL)                            /*!< Core Debug Base Address */
+#define SysTick_BASE        (SCS_BASE +  0x0010UL)                    /*!< SysTick Base Address */
+#define NVIC_BASE           (SCS_BASE +  0x0100UL)                    /*!< NVIC Base Address */
+#define SCB_BASE            (SCS_BASE +  0x0D00UL)                    /*!< System Control Block Base Address */
+
+
+
+/* Memory mapping of Processor Hardware */
 #define FLASH_BASE            0x08000000UL /*!< FLASH base address in the alias region */
 #define FLASH_BANK1_END       0x0807FFFFUL /*!< FLASH END address of bank1 */
 #define SRAM_BASE             0x20000000UL /*!< SRAM base address in the alias region */
@@ -155,6 +169,27 @@
  **************************************************************************************************************/
 
 /**
+  \brief  Structure type to access the Nested Vectored Interrupt Controller (NVIC).
+ */
+typedef struct
+{
+  __IO uint32_t ISER[8U];               /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register */
+       uint32_t RESERVED0[24U];
+  __IO uint32_t ICER[8U];               /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register */
+       uint32_t RSERVED1[24U];
+  __IO uint32_t ISPR[8U];               /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register */
+       uint32_t RESERVED2[24U];
+  __IO uint32_t ICPR[8U];               /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register */
+       uint32_t RESERVED3[24U];
+  __IO uint32_t IABR[8U];               /*!< Offset: 0x200 (R/W)  Interrupt Active bit Register */
+       uint32_t RESERVED4[56U];
+  __IO uint8_t  IPR[240U];               /*!< Offset: 0x300 (R/W)  Interrupt Priority Register (8Bit wide) */
+       uint32_t RESERVED5[644U];
+  __IO uint32_t STIR;                   /*!< Offset: 0xE00 ( /W)  Software Trigger Interrupt Register */
+}  NVIC_Type;
+
+
+/**
   * @brief Analog to Digital Converter
   */
 
@@ -241,6 +276,21 @@ typedef struct
 
 
 /**
+  * @brief External Interrupt/Event Controller
+  */
+
+typedef struct
+{
+  __IO uint32_t IMR;
+  __IO uint32_t EMR;
+  __IO uint32_t RTSR;
+  __IO uint32_t FTSR;
+  __IO uint32_t SWIER;
+  __IO uint32_t PR;
+} EXTI_TypeDef;
+
+
+/**
   * @brief Reset and Clock Control
   */
 
@@ -312,6 +362,17 @@ typedef struct
  * 																											  *
  **************************************************************************************************************/
 
+/* Peripheral Declarations of Core Hardware */
+#define SCnSCB              ((SCnSCB_Type    *)     SCS_BASE      )   /*!< System control Register not in SCB */
+#define SCB                 ((SCB_Type       *)     SCB_BASE      )   /*!< SCB configuration struct */
+#define SysTick             ((SysTick_Type   *)     SysTick_BASE  )   /*!< SysTick configuration struct */
+#define NVIC                ((NVIC_Type      *)     NVIC_BASE     )   /*!< NVIC configuration struct */
+#define ITM                 ((ITM_Type       *)     ITM_BASE      )   /*!< ITM configuration struct */
+#define DWT                 ((DWT_Type       *)     DWT_BASE      )   /*!< DWT configuration struct */
+#define TPI                 ((TPI_Type       *)     TPI_BASE      )   /*!< TPI configuration struct */
+#define CoreDebug           ((CoreDebug_Type *)     CoreDebug_BASE)   /*!< Core Debug configuration struct */
+
+/* Peripheral Declarations of Processor Hardware */
 #define TIM2                ((TIM_TypeDef *)TIM2_BASE)
 #define TIM3                ((TIM_TypeDef *)TIM3_BASE)
 #define TIM4                ((TIM_TypeDef *)TIM4_BASE)
@@ -2234,6 +2295,8 @@ typedef struct
 #define WAIT_FLAG_CLEAR(REG, FLAG)		do{  while( ((REG) & (FLAG)) ); }while(0)
 
 
+
+
 /**************************************************************************************************************
  * 																											  *
  * 											Peripheral Header file					 						  *
@@ -2241,7 +2304,8 @@ typedef struct
  **************************************************************************************************************/
 
 #include "stm32f103xx_rcc_driver.h"
-
+#include "stm32f103xx_gpio_driver.h"
+#include "it.h"
 
 /**************************************************************************************************************
  * 																											  *

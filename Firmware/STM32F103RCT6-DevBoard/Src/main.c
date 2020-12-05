@@ -22,19 +22,34 @@
 
 int main(void)
 {
+	GPIO_InitTypeDef gpioInit;
+
 	SystemClock_Config(SYSCLK_FREQ_72MHZ);		// Other SYSCLK options are available
+	RCC_GPIOA_CLK_ENABLE();
 
-	RCC->CFGR |= RCC_CFGR_MCOSEL_SYSCLK;		// Select SYSCLK as MCO output
+	gpioInit.Pin = GPIO_PIN_0;
+	gpioInit.Mode = GPIO_MODE_IT_RISING_FALLING;
+	gpioInit.Pull = GPIO_PULLUP;
+	//gpioInit.Speed = GPIO_SPEED_FREQ_LOW;
 
-	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;			// Clock enable GPIOA
+	GPIO_Init(GPIOA, &gpioInit);
 
-	GPIOA->CRH &= ~(0x3 << 2);					// Clear CNF field of PA8
-	GPIOA->CRH |= 0x3;							// Configure PA8 as Output mode of max speed 50MHz
-	GPIOA->CRH |= (0x1 << 3);					// Configure PA8 as Alternate Function output Push-pull
+	gpioInit.Pin = GPIO_PIN_3;
+	gpioInit.Mode = GPIO_MODE_OUTPUT_PP;
+	gpioInit.Pull = GPIO_NOPULL;
+	gpioInit.Speed = GPIO_SPEED_FREQ_LOW;
+
+	GPIO_Init(GPIOA, &gpioInit);
+
+	NVIC_IRQConfig(IRQ_NO_EXTI0, NVIC_PRIOR_8, ENABLE);
 
 
 	while(1);
 }
+
+
+
+
 
 
 
