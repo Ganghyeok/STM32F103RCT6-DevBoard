@@ -8,29 +8,6 @@
 #include "stm32f103xx_gpio_driver.h"
 
 
-
-/**************************************************************************************************************
- * 																											  *
- * 												User Macro Definition										  *
- * 									  																		  *
- **************************************************************************************************************/
-
-#define EXTI_MODE				0x10000000U
-#define GPIO_MODE_IT			0x00010000U
-#define GPIO_MODE_EVT			0x00020000U
-#define RISING_EDGE				0x00100000U
-#define FALLING_EDGE			0x00200000U
-#define GPIO_OUTPUT_TYPE		0x00000010U
-
-/**************************************************************************************************************
- * 																											  *
- * 												User Macro Function											  *
- * 									  																		  *
- **************************************************************************************************************/
-
-
-
-
 /**************************************************************************************************************
  * 																											  *
  * 											APIs supported by this driver									  *
@@ -201,10 +178,14 @@ void GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
 	}
 }
 
+
+
 void GPIO_DeInit(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin)
 {
 
 }
+
+
 
 /* IO operation functions *****************************************************/
 uint8_t GPIO_ReadPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
@@ -212,6 +193,8 @@ uint8_t GPIO_ReadPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
 	if((uint16_t)GPIOx->IDR & GPIO_Pin)		return GPIO_PIN_SET;
 	else									return GPIO_PIN_RESET;
 }
+
+
 
 void GPIO_WritePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t PinState)
 {
@@ -224,6 +207,8 @@ void GPIO_WritePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t PinState)
 		GPIOx->BSRR |= ((uint32_t)GPIO_Pin << 16);
 	}
 }
+
+
 
 void GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
 {

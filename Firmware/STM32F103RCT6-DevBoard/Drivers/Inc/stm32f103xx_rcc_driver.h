@@ -28,6 +28,7 @@ typedef struct
 } RCC_PLLInitTypeDef;
 
 
+
 /**
   * @brief  RCC Internal/External Oscillator (HSE, HSI, LSE and LSI) configuration structure definition
   */
@@ -58,6 +59,7 @@ typedef struct
 
 
 } RCC_OscInitTypeDef;
+
 
 
 /**
@@ -111,13 +113,9 @@ typedef struct
 /** @defgroup RCC_PLL_Clock_Source PLL Clock Source
   * @{
   */
-
 #define RCC_PLLSOURCE_HSI_DIV2      0x00000000U     /*!< HSI clock divided by 2 selected as PLL entry clock source */
 #define RCC_PLLSOURCE_HSE           RCC_CFGR_PLLSRC            /*!< HSE clock selected as PLL entry clock source */
 
-/**
-  * @}
-  */
 
 /** @defgroup RCC_Oscillator_Type Oscillator Type
   * @{
@@ -127,9 +125,7 @@ typedef struct
 #define RCC_OSCILLATORTYPE_HSI             0x00000002U
 #define RCC_OSCILLATORTYPE_LSE             0x00000004U
 #define RCC_OSCILLATORTYPE_LSI             0x00000008U
-/**
-  * @}
-  */
+
 
 /** @defgroup RCC_HSE_Config HSE Config
   * @{
@@ -137,6 +133,7 @@ typedef struct
 #define RCC_HSE_OFF                      0x00000000U                                /*!< HSE clock deactivation */
 #define RCC_HSE_ON                       RCC_CR_HSEON                               /*!< HSE clock activation */
 #define RCC_HSE_BYPASS                   ((uint32_t)(RCC_CR_HSEBYP | RCC_CR_HSEON)) /*!< External clock source for HSE clock */
+
 
 /** @defgroup RCCEx_Prediv1_Factor HSE Prediv1 Factor
   * @{
@@ -151,9 +148,6 @@ typedef struct
 #define RCC_LSE_ON                       RCC_BDCR_LSEON                                 /*!< LSE clock activation */
 #define RCC_LSE_BYPASS                   ((uint32_t)(RCC_BDCR_LSEBYP | RCC_BDCR_LSEON)) /*!< External clock source for LSE clock */
 
-/**
-  * @}
-  */
 
 /** @defgroup RCC_HSI_Config HSI Config
   * @{
@@ -163,15 +157,13 @@ typedef struct
 
 #define RCC_HSICALIBRATION_DEFAULT       0x10U         /* Default HSI calibration trimming value */
 
-/**
-  * @}
-  */
 
 /** @defgroup RCC_LSI_Config LSI Config
   * @{
   */
 #define RCC_LSI_OFF                      0x00000000U              /*!< LSI clock deactivation */
 #define RCC_LSI_ON                       RCC_CSR_LSION            /*!< LSI clock activation */
+
 
 /** @defgroup RCC_PLL_Config PLL Config
   * @{
@@ -180,9 +172,6 @@ typedef struct
 #define RCC_PLL_OFF                       0x00000001U  /*!< PLL deactivation */
 #define RCC_PLL_ON                        0x00000002U  /*!< PLL activation */
 
-/**
-  * @}
-  */
 
 /** @defgroup RCC_System_Clock_Type System Clock Type
   * @{
@@ -192,9 +181,6 @@ typedef struct
 #define RCC_CLOCKTYPE_PCLK1              0x00000004U /*!< PCLK1 to configure */
 #define RCC_CLOCKTYPE_PCLK2              0x00000008U /*!< PCLK2 to configure */
 
-/**
-  * @}
-  */
 
 /** @defgroup RCC_System_Clock_Source System Clock Source
   * @{
@@ -203,9 +189,6 @@ typedef struct
 #define RCC_SYSCLKSOURCE_HSE             RCC_CFGR_SW_HSE /*!< HSE selected as system clock */
 #define RCC_SYSCLKSOURCE_PLLCLK          RCC_CFGR_SW_PLL /*!< PLL selected as system clock */
 
-/**
-  * @}
-  */
 
 /** @defgroup RCC_System_Clock_Source_Status System Clock Source Status
   * @{
@@ -214,9 +197,6 @@ typedef struct
 #define RCC_SYSCLKSOURCE_STATUS_HSE      RCC_CFGR_SWS_HSE            /*!< HSE used as system clock */
 #define RCC_SYSCLKSOURCE_STATUS_PLLCLK   RCC_CFGR_SWS_PLL            /*!< PLL used as system clock */
 
-/**
-  * @}
-  */
 
 /** @defgroup RCC_AHB_Clock_Source AHB Clock Source
   * @{
@@ -231,9 +211,6 @@ typedef struct
 #define RCC_SYSCLK_DIV256                RCC_CFGR_HPRE_DIV256 /*!< SYSCLK divided by 256 */
 #define RCC_SYSCLK_DIV512                RCC_CFGR_HPRE_DIV512 /*!< SYSCLK divided by 512 */
 
-/**
-  * @}
-  */
 
 /** @defgroup RCC_APB1_APB2_Clock_Source APB1 APB2 Clock Source
   * @{
@@ -244,15 +221,13 @@ typedef struct
 #define RCC_HCLK_DIV8                    RCC_CFGR_PPRE1_DIV8  /*!< HCLK divided by 8 */
 #define RCC_HCLK_DIV16                   RCC_CFGR_PPRE1_DIV16 /*!< HCLK divided by 16 */
 
+
 /** @defgroup RCC_MCO_Index MCO Index
   * @{
   */
 #define RCC_MCO1                         0x00000000U
 #define RCC_MCO                          RCC_MCO1               /*!< MCO1 to be compliant with other families with 2 MCOs*/
 
-/**
-  * @}
-  */
 
 /** @defgroup RCC_MCOx_Clock_Prescaler MCO Clock Prescaler
   * @{
@@ -331,6 +306,7 @@ typedef struct
 #define RCC_USART1_CLK_ENABLE()			( SET_BIT(RCC->APB2ENR, RCC_APB2ENR_USART1EN) )
 #define RCC_ADC3_CLK_ENABLE()			( SET_BIT(RCC->APB2ENR, RCC_APB2ENR_ADC3EN) )
 
+
 /* APB1 peripheral clock enable function */
 #define RCC_TIM2_CLK_ENABLE()			( SET_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM2EN) )
 #define RCC_TIM3_CLK_ENABLE()			( SET_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM3EN) )
@@ -351,9 +327,6 @@ typedef struct
 #define RCC_PWR_CLK_ENABLE()			( SET_BIT(RCC->APB1ENR, RCC_APB1ENR_PWREN) )
 
 
-
-
-
 /**************************************************************************************************************
  * 																											  *
  * 											APIs supported by this driver									  *
@@ -366,6 +339,9 @@ void RCC_ClockConfig(RCC_ClkInitTypeDef *RCC_ClkInitStruct, uint32_t FLatency);
 void SystemClock_Config(uint8_t clock_freq);
 void Delay_us(uint32_t time_us);
 void Delay_ms(uint32_t time_ms);
+void Delay_us_new(uint32_t time_us);
+
+
 
 
 #endif /* STM32F103XX_RCC_DRIVER_H_ */

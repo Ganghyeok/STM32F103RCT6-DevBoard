@@ -27,13 +27,6 @@ int main(void)
 	SystemClock_Config(SYSCLK_FREQ_72MHZ);		// Other SYSCLK options are available
 	RCC_GPIOA_CLK_ENABLE();
 
-	gpioInit.Pin = GPIO_PIN_0;
-	gpioInit.Mode = GPIO_MODE_IT_RISING_FALLING;
-	gpioInit.Pull = GPIO_PULLUP;
-	//gpioInit.Speed = GPIO_SPEED_FREQ_LOW;
-
-	GPIO_Init(GPIOA, &gpioInit);
-
 	gpioInit.Pin = GPIO_PIN_3;
 	gpioInit.Mode = GPIO_MODE_OUTPUT_PP;
 	gpioInit.Pull = GPIO_NOPULL;
@@ -41,10 +34,12 @@ int main(void)
 
 	GPIO_Init(GPIOA, &gpioInit);
 
-	NVIC_IRQConfig(IRQ_NO_EXTI0, NVIC_PRIOR_8, ENABLE);
 
-
-	while(1);
+	while(1)
+	{
+		GPIO_TogglePin(GPIOA, GPIO_PIN_3);
+		Delay_ms(1);
+	}
 }
 
 

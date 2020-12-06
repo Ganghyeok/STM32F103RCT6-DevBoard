@@ -31,7 +31,6 @@ typedef struct
 
 
 
-
 /** @defgroup GPIO_pins_define GPIO pins define
   * @{
   */
@@ -54,9 +53,8 @@ typedef struct
 #define GPIO_PIN_All               ((uint16_t)0xFFFF)  /* All pins selected */
 
 #define GPIO_PIN_MASK              0x0000FFFFu /* PIN mask for assert test */
-/**
-  * @}
-  */
+
+
 
 /** @defgroup GPIO_mode_define GPIO mode define
   * @brief GPIO Configuration Mode
@@ -94,9 +92,6 @@ typedef struct
 #define  GPIO_SPEED_FREQ_MEDIUM           (GPIO_CRL_MODE0_0) /*!< Medium speed */
 #define  GPIO_SPEED_FREQ_HIGH             (GPIO_CRL_MODE0)   /*!< High speed */
 
-/**
-  * @}
-  */
 
 /** @defgroup GPIO_pull_define GPIO pull define
   * @brief GPIO Pull-Up or Pull-Down Activation
@@ -113,7 +108,12 @@ typedef struct
  * 									  																		  *
  **************************************************************************************************************/
 
-
+#define EXTI_MODE				0x10000000U
+#define GPIO_MODE_IT			0x00010000U
+#define GPIO_MODE_EVT			0x00020000U
+#define RISING_EDGE				0x00100000U
+#define FALLING_EDGE			0x00200000U
+#define GPIO_OUTPUT_TYPE		0x00000010U
 
 
 /**************************************************************************************************************
@@ -121,13 +121,13 @@ typedef struct
  * 												User Macro Function											  *
  * 									  																		  *
  **************************************************************************************************************/
+
 #define GET_GPIOCODE(x)				  ( (x == GPIOA) ? 0 : \
 										(x == GPIOB) ? 1 : \
 										(x == GPIOC) ? 2 : \
 										(x == GPIOD) ? 3 : \
 										(x == GPIOE) ? 4 : \
 										(x == GPIOF) ? 5 : 6 )
-
 
 
 /**************************************************************************************************************

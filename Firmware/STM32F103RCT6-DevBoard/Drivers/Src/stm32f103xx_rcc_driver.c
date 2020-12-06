@@ -223,15 +223,16 @@ void SystemClock_Config(uint8_t clockFreq)
 	RCC_OscConfig(&oscInit);
 
 	RCC_ClockConfig(&clkInit, (uint32_t)FLatency);
-
 }
 
 
 void Delay_us(uint32_t time_us)
 {
-	for(uint32_t i = 0; i < (time_us / 10); i++)
+	register uint32_t i, j;
+
+	for(i = 0; i < (time_us / 10); i++)
 	{
-		for(uint8_t j = 0; j < 0x32; j++)
+		for(j = 0; j < 0x4D; j++)
 		{
 			asm volatile ("NOP");
 		}
@@ -243,14 +244,6 @@ void Delay_ms(uint32_t time_ms)
 {
 	Delay_us(time_ms * 1000);
 }
-
-
-
-
-
-
-
-
 
 
 
