@@ -23,30 +23,30 @@
 void GPIO_BTNInit(GPIO_HandleTypeDef *pGPIOHandle);
 void USARTx_Init(UART_HandleTypeDef *pUSARTHandle);
 
-
-char str[13] = "Hello World!";
-
+UART_HandleTypeDef USART1Handle;
+char str1[15] = "Hello World!\n\r";
+char str2[17] = "VAPALUX_Clever\n\r";
 
 
 int main(void)
 {
 	GPIO_HandleTypeDef GPIOHandle;
-	UART_HandleTypeDef USARTHandle;
 
 	memset(&GPIOHandle, 0, sizeof(GPIOHandle));
-	memset(&USARTHandle, 0, sizeof(USARTHandle));
+	memset(&USART1Handle, 0, sizeof(USART1Handle));
 
 	SystemClock_Config(SYSCLK_FREQ_72MHZ);		// Other SYSCLK options are available
 
-
+	// GPIO Initialization for Button(PA0)
 	GPIO_BTNInit(&GPIOHandle);
-
 
 	// 1. GPIO Initialization of UART with GPIO clock enable
 	USART_GPIOInit(USART1);
 
 	// 2. UART Initialization with UART Clock enable
-	USARTx_Init(&USARTHandle);
+	USARTx_Init(&USART1Handle);
+
+	NVIC_IRQConfig(IRQ_NO_USART1, NVIC_PRIOR_8, ENABLE);
 
 	Delay_ms(10);
 
@@ -54,10 +54,12 @@ int main(void)
 	while(1)
 	{
 		while(GPIO_ReadPin(GPIOA, GPIO_PIN_0));
-
 		Delay_ms(200);
+		USART_Transmit_IT(&USART1Handle, (uint8_t*)str1, strlen(str1));
 
-		USART_Transmit(&USARTHandle, (uint8_t*)str, strlen(str));
+		while(GPIO_ReadPin(GPIOA, GPIO_PIN_0));
+		Delay_ms(200);
+		USART_Transmit_IT(&USART1Handle, (uint8_t*)str2, strlen(str2));
 	}
 }
 
@@ -87,40 +89,5 @@ void USARTx_Init(UART_HandleTypeDef *pUSARTHandle)
 
 	USART_Init(pUSARTHandle);
 }
-
-
-
-
-
-
-/*
-int main(void)
-{
-	GPIO_InitTypeDef gpioInit;
-
-	SystemClock_Config(SYSCLK_FREQ_72MHZ);		// Other SYSCLK options are available
-	RCC_GPIOA_CLK_ENABLE();
-
-	gpioInit.Pin = GPIO_PIN_3;
-	gpioInit.Mode = GPIO_MODE_OUTPUT_PP;
-	gpioInit.Pull = GPIO_NOPULL;
-	gpioInit.Speed = GPIO_SPEED_FREQ_LOW;
-
-	GPIO_Init(GPIOA, &gpioInit);
-
-
-	while(1)
-	{
-		GPIO_TogglePin(GPIOA, GPIO_PIN_3);
-		Delay_ms(1000);
-	}
-}
-*/
-
-
-
-
-
-
 
 

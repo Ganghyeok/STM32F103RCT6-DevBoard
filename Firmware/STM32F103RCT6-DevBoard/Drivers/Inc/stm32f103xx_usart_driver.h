@@ -223,6 +223,19 @@ typedef struct __UART_HandleTypeDef
 #define USART_STATE_BUSY_TX_RX						5
 #define USART_STATE_ERROR							6
 
+
+/*
+ *  @USART_EVENT
+ */
+#define USART_EVENT_TX_CMPLT						0
+#define USART_EVENT_RX_CMPLT						1
+#define USART_EVENT_IDLE							2
+#define USART_EVENT_CTS								3
+#define USART_EVENT_PE								4
+#define USART_ERROR_FE								5
+#define USART_ERROR_NF								6
+#define USART_ERROR_ORE								7
+
 /**************************************************************************************************************
  * 																											  *
  * 											APIs supported by this driver									  *
@@ -236,7 +249,7 @@ void USART_PeripheralClockControl(USART_TypeDef *USARTx, uint8_t En_or_Di);
 void USART_PeripheralControl(USART_TypeDef *USARTx, uint8_t En_or_Di);
 void USART_SetBaudRate(USART_TypeDef *USARTx, uint32_t BaudRate);
 void USART_Transmit(UART_HandleTypeDef *pUSARTHandle, uint8_t *TxBuffer, uint16_t Size);
-
-
+uint8_t USART_Transmit_IT(UART_HandleTypeDef *pUSARTHandle, uint8_t *TxBuffer, uint16_t Size);
+void USART_IRQHandling(UART_HandleTypeDef *pUSARTHandle);
 
 #endif /* INC_STM32F103XX_USART_DRIVER_H_ */
