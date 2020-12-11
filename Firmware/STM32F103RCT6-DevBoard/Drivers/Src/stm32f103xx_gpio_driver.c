@@ -22,6 +22,9 @@ void GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
 	volatile uint32_t *configRegister;
 	uint32_t registerOffset = 0;
 
+	// GPIO Clock enable
+	GPIOx_ClockEnable(GPIOx);
+
 	for(uint8_t position = 0; position < 16; position++)
 	{
 		if( GPIO_Init->Pin & (1 << position) )

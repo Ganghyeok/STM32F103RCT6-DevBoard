@@ -283,13 +283,21 @@ typedef struct
 #define SYSCLK_FREQ_64MHZ				64
 #define SYSCLK_FREQ_72MHZ				72
 
+
+/*
+ *  PCLK options
+ */
+#define PCLK1							0
+#define PCLK2							1
+
+
 /**************************************************************************************************************
  * 																											  *
  * 												User Macro Function											  *
  * 									  																		  *
  **************************************************************************************************************/
 
-/* APB2 peripheral clock enable function */
+/* APB2 Peripheral Clock Enable function */
 #define RCC_AFIO_CLK_ENABLE()			( SET_BIT(RCC->APB2ENR, RCC_APB2ENR_AFIOEN) )
 #define RCC_GPIOA_CLK_ENABLE()			( SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPAEN) )
 #define RCC_GPIOB_CLK_ENABLE()			( SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPBEN) )
@@ -307,7 +315,25 @@ typedef struct
 #define RCC_ADC3_CLK_ENABLE()			( SET_BIT(RCC->APB2ENR, RCC_APB2ENR_ADC3EN) )
 
 
-/* APB1 peripheral clock enable function */
+/* APB2 Peripheral Clock Disable function */
+#define RCC_AFIO_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_AFIOEN) )
+#define RCC_GPIOA_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPAEN) )
+#define RCC_GPIOB_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPBEN) )
+#define RCC_GPIOC_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPCEN) )
+#define RCC_GPIOD_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPDEN) )
+#define RCC_GPIOE_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPEEN) )
+#define RCC_GPIOF_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPFEN) )
+#define RCC_GPIOG_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPGEN) )
+#define RCC_ADC1_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_ADC1EN) )
+#define RCC_ADC2_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_ADC2EN) )
+#define RCC_TIM1_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_TIM1EN) )
+#define RCC_SPI1_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_SPI1EN) )
+#define RCC_TIM8_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_TIM8EN) )
+#define RCC_USART1_CLK_DISABLE()		( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_USART1EN) )
+#define RCC_ADC3_CLK_DISABLE()			( CLEAR_BIT(RCC->APB2ENR, RCC_APB2ENR_ADC3EN) )
+
+
+/* APB1 Peripheral Clock Enable function */
 #define RCC_TIM2_CLK_ENABLE()			( SET_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM2EN) )
 #define RCC_TIM3_CLK_ENABLE()			( SET_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM3EN) )
 #define RCC_TIM4_CLK_ENABLE()			( SET_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM4EN) )
@@ -327,6 +353,26 @@ typedef struct
 #define RCC_PWR_CLK_ENABLE()			( SET_BIT(RCC->APB1ENR, RCC_APB1ENR_PWREN) )
 
 
+/* APB1 Peripheral Clock Disable function */
+#define RCC_TIM2_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM2EN) )
+#define RCC_TIM3_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM3EN) )
+#define RCC_TIM4_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM4EN) )
+#define RCC_TIM5_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM5EN) )
+#define RCC_TIM6_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM6EN) )
+#define RCC_TIM7_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM7EN) )
+#define RCC_WWDG_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_WWDGEN) )
+#define RCC_SPI2_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_SPI2EN) )
+#define RCC_SPI3_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_SPI3EN) )
+#define RCC_USART2_CLK_DISABLE()		( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_USART2EN) )
+#define RCC_USART3_CLK_DISABLE()		( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_USART3EN) )
+#define RCC_UART4_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_UART4EN) )
+#define RCC_UART5_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_UART5EN) )
+#define RCC_I2C1_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_I2C1EN) )
+#define RCC_I2C2_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_I2C2EN) )
+#define RCC_CAN1_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_CAN1EN) )
+#define RCC_PWR_CLK_DISABLE()			( CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_PWREN) )
+
+
 /**************************************************************************************************************
  * 																											  *
  * 											APIs supported by this driver									  *
@@ -339,9 +385,8 @@ void RCC_ClockConfig(RCC_ClkInitTypeDef *RCC_ClkInitStruct, uint32_t FLatency);
 void SystemClock_Config(uint8_t clock_freq);
 void Delay_us(uint32_t time_us);
 void Delay_ms(uint32_t time_ms);
-void Delay_us_new(uint32_t time_us);
-
-
+uint32_t RCC_GetPLLOutputClock(void);
+uint32_t RCC_GetPCLKxValue(uint8_t pclkType);
 
 
 #endif /* STM32F103XX_RCC_DRIVER_H_ */

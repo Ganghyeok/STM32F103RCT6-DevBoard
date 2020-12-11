@@ -30,6 +30,17 @@ typedef struct
 } GPIO_InitTypeDef;
 
 
+/**
+  * @brief  GPIO handle Structure definition
+  */
+typedef struct
+{
+	GPIO_TypeDef		*Instance;		/*!< GPIO registers base address        */
+
+	GPIO_InitTypeDef	Init;			/*!< GPIO configuration parameters      */
+
+} GPIO_HandleTypeDef;
+
 
 /** @defgroup GPIO_pins_define GPIO pins define
   * @{
@@ -128,6 +139,14 @@ typedef struct
 										(x == GPIOD) ? 3 : \
 										(x == GPIOE) ? 4 : \
 										(x == GPIOF) ? 5 : 6 )
+
+
+#define GPIOx_ClockEnable(x)		  ( (x == GPIOA) ? RCC_GPIOA_CLK_ENABLE() : \
+										(x == GPIOB) ? RCC_GPIOB_CLK_ENABLE() : \
+										(x == GPIOC) ? RCC_GPIOC_CLK_ENABLE() : \
+										(x == GPIOD) ? RCC_GPIOD_CLK_ENABLE() : \
+										(x == GPIOE) ? RCC_GPIOE_CLK_ENABLE() : \
+										(x == GPIOF) ? RCC_GPIOF_CLK_ENABLE() : RCC_GPIOG_CLK_ENABLE() )
 
 
 /**************************************************************************************************************

@@ -20,6 +20,80 @@
 #include "stm32f103xx.h"
 
 
+void GPIO_BTNInit(GPIO_HandleTypeDef *pGPIOHandle);
+void USARTx_Init(UART_HandleTypeDef *pUSARTHandle);
+
+
+char str[13] = "Hello World!";
+
+
+
+int main(void)
+{
+	GPIO_HandleTypeDef GPIOHandle;
+	UART_HandleTypeDef USARTHandle;
+
+	memset(&GPIOHandle, 0, sizeof(GPIOHandle));
+	memset(&USARTHandle, 0, sizeof(USARTHandle));
+
+	SystemClock_Config(SYSCLK_FREQ_72MHZ);		// Other SYSCLK options are available
+
+
+	GPIO_BTNInit(&GPIOHandle);
+
+
+	// 1. GPIO Initialization of UART with GPIO clock enable
+	USART_GPIOInit(USART1);
+
+	// 2. UART Initialization with UART Clock enable
+	USARTx_Init(&USARTHandle);
+
+	Delay_ms(10);
+
+
+	while(1)
+	{
+		while(GPIO_ReadPin(GPIOA, GPIO_PIN_0));
+
+		Delay_ms(200);
+
+		USART_Transmit(&USARTHandle, (uint8_t*)str, strlen(str));
+	}
+}
+
+
+void GPIO_BTNInit(GPIO_HandleTypeDef *pGPIOHandle)
+{
+	pGPIOHandle->Instance = GPIOA;
+	pGPIOHandle->Init.Mode = GPIO_MODE_INPUT;
+	pGPIOHandle->Init.Pin = GPIO_PIN_0;
+	pGPIOHandle->Init.Pull = GPIO_PULLUP;
+
+	GPIO_Init(GPIOA, &pGPIOHandle->Init);
+}
+
+
+void USARTx_Init(UART_HandleTypeDef *pUSARTHandle)
+{
+	pUSARTHandle->Instance = USART1;
+	pUSARTHandle->Init.Mode = UART_MODE_TX;
+	pUSARTHandle->Init.BaudRate = USART_STD_BAUD_115200;
+	pUSARTHandle->Init.OverSampling = UART_OVERSAMPLING_16;
+	pUSARTHandle->Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	pUSARTHandle->Init.Parity = UART_PARITY_NONE;
+	pUSARTHandle->Init.StopBits = UART_STOPBITS_1;
+	pUSARTHandle->Init.WordLength = UART_WORDLENGTH_8B;
+	pUSARTHandle->State = USART_STATE_READY;
+
+	USART_Init(pUSARTHandle);
+}
+
+
+
+
+
+
+/*
 int main(void)
 {
 	GPIO_InitTypeDef gpioInit;
@@ -38,10 +112,10 @@ int main(void)
 	while(1)
 	{
 		GPIO_TogglePin(GPIOA, GPIO_PIN_3);
-		Delay_ms(1);
+		Delay_ms(1000);
 	}
 }
-
+*/
 
 
 
