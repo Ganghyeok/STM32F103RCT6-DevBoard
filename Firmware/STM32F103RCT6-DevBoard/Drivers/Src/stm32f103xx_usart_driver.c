@@ -59,7 +59,7 @@ __weak void USARTx_Init(UART_HandleTypeDef * pUSARTHandle)
 }
 
 
-void USART_GPIOInit(USART_TypeDef *USARTx)
+void USART_LowInit(USART_TypeDef *USARTx)
 {
 	GPIO_HandleTypeDef GPIOHandle;
 

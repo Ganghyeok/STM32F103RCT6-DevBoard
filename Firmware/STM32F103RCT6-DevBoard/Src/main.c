@@ -20,13 +20,13 @@
 #include "stm32f103xx.h"
 
 
-void GPIO_BTNInit(GPIO_HandleTypeDef *pGPIOHandle);
-void USARTx_Init(UART_HandleTypeDef *pUSARTHandle);
+void GPIO_LEDInit(GPIO_HandleTypeDef *pGPIOHandle);
+void USART1_Init(UART_HandleTypeDef *pUSARTHandle);
 
 UART_HandleTypeDef USART1Handle;
 char str1[15] = "Hello World!\n\r";
 char str2[17] = "VAPALUX_Clever\n\r";
-
+TIM_HandleTypeDef TIMHandle;
 
 int main(void)
 {
@@ -38,44 +38,66 @@ int main(void)
 	SystemClock_Config(SYSCLK_FREQ_72MHZ);		// Other SYSCLK options are available
 
 	// GPIO Initialization for Button(PA0)
-	GPIO_BTNInit(&GPIOHandle);
+	GPIO_LEDInit(&GPIOHandle);
 
-	// 1. GPIO Initialization of UART with GPIO clock enable
-	USART_GPIOInit(USART1);
+	// 1. Low level initialization of UART with GPIO clock enable
+	USART_LowInit(USART1);
 
-	// 2. UART Initialization with UART Clock enable
-	USARTx_Init(&USART1Handle);
+	// 2. UART initialization with UART Clock enable
+	USART1_Init(&USART1Handle);
 
 	NVIC_IRQConfig(IRQ_NO_USART1, NVIC_PRIOR_8, ENABLE);
 
 	Delay_ms(10);
 
+	/* ---------------------------------------------------------------------------- */
+
+
+	memset(&TIMHandle, 0, sizeof(TIMHandle));
+
+	// TIM Init Structure config
+	TIMHandle.Instance = TIM6;
+	TIMHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
+	TIMHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV4;
+	TIMHandle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	TIMHandle.Init.Prescaler = 59999;  //   72MHz / (59999 + 1) = 1200Hz
+	TIMHandle.Init.Period = 599;  //   1200 / (599 + 1) = 2Hz
+	TIMHandle.Init.RepetitionCounter = 0;
+
+	// TIM Base Initialization
+	TIM_BaseInit(&TIMHandle);
+
+	// TIM Lowlevel Init(GPIO, etc)
+
+	// NVIC Config and Enable TIM UEV Interrupt
+	NVIC_IRQConfig(IRQ_NO_TIM6, NVIC_PRIOR_5, ENABLE);
+
+	TIMHandle.Instance->DIER |= TIM_DIER_UIE;
+
+	// TIM Base Start
+	TIMHandle.Instance->CR1 |= TIM_CR1_CEN;
+
 
 	while(1)
 	{
-		while(GPIO_ReadPin(GPIOA, GPIO_PIN_0));
-		Delay_ms(200);
-		USART_Transmit_IT(&USART1Handle, (uint8_t*)str1, strlen(str1));
 
-		while(GPIO_ReadPin(GPIOA, GPIO_PIN_0));
-		Delay_ms(200);
-		USART_Transmit_IT(&USART1Handle, (uint8_t*)str2, strlen(str2));
 	}
 }
 
 
-void GPIO_BTNInit(GPIO_HandleTypeDef *pGPIOHandle)
+void GPIO_LEDInit(GPIO_HandleTypeDef *pGPIOHandle)
 {
 	pGPIOHandle->Instance = GPIOA;
-	pGPIOHandle->Init.Mode = GPIO_MODE_INPUT;
+	pGPIOHandle->Init.Mode = GPIO_MODE_OUTPUT_PP;
 	pGPIOHandle->Init.Pin = GPIO_PIN_0;
-	pGPIOHandle->Init.Pull = GPIO_PULLUP;
+	pGPIOHandle->Init.Pull = GPIO_NOPULL;
+	pGPIOHandle->Init.Speed = GPIO_SPEED_FREQ_LOW;
 
 	GPIO_Init(GPIOA, &pGPIOHandle->Init);
 }
 
 
-void USARTx_Init(UART_HandleTypeDef *pUSARTHandle)
+void USART1_Init(UART_HandleTypeDef *pUSARTHandle)
 {
 	pUSARTHandle->Instance = USART1;
 	pUSARTHandle->Init.Mode = UART_MODE_TX;
@@ -90,4 +112,8 @@ void USARTx_Init(UART_HandleTypeDef *pUSARTHandle)
 	USART_Init(pUSARTHandle);
 }
 
-
+/*
+	while(GPIO_ReadPin(GPIOA, GPIO_PIN_0));
+	Delay_ms(200);
+	USART_Transmit_IT(&USART1Handle, (uint8_t*)str2, strlen(str2));
+ */

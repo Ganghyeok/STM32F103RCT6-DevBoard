@@ -244,7 +244,7 @@ typedef struct __UART_HandleTypeDef
  **************************************************************************************************************/
 
 void USART_Init(UART_HandleTypeDef *pUSARTHandle);
-void USART_GPIOInit(USART_TypeDef *USARTx);
+void USART_LowInit(USART_TypeDef *USARTx);
 void USART_PeripheralClockControl(USART_TypeDef *USARTx, uint8_t En_or_Di);
 void USART_PeripheralControl(USART_TypeDef *USARTx, uint8_t En_or_Di);
 void USART_SetBaudRate(USART_TypeDef *USARTx, uint32_t BaudRate);

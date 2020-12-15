@@ -9,7 +9,7 @@
 
 
 extern UART_HandleTypeDef USART1Handle;
-
+extern TIM_HandleTypeDef TIMHandle;
 
 void EXTI0_IRQHandler(void)
 {
@@ -32,4 +32,11 @@ void USART1_IRQHandler(void)
 void SysTick_Handler(void)
 {
 	GPIO_TogglePin(GPIOA, GPIO_PIN_3);
+}
+
+
+void TIM6_IRQHandler(void)
+{
+	CLEAR_BIT(TIMHandle.Instance->SR, TIM_SR_UIF);
+	GPIO_TogglePin(GPIOA, GPIO_PIN_0);
 }
