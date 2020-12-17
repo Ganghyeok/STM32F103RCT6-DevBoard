@@ -133,6 +133,36 @@ typedef struct
 #define TIM_CLOCKDIVISION_DIV4             TIM_CR1_CKD_1                        /*!< Clock division: tDTS=4*tCK_INT */
 
 
+/** @defgroup TIM_Output_Compare_and_PWM_modes TIM Output Compare and PWM Modes
+  * @{
+  */
+#define TIM_OCMODE_TIMING                   0x00000000U                                              /*!< Frozen                                 */
+#define TIM_OCMODE_ACTIVE                   TIM_CCMR1_OC1M_0                                         /*!< Set channel to active level on match   */
+#define TIM_OCMODE_INACTIVE                 TIM_CCMR1_OC1M_1                                         /*!< Set channel to inactive level on match */
+#define TIM_OCMODE_TOGGLE                   (TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0)                    /*!< Toggle                                 */
+#define TIM_OCMODE_PWM1                     (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1)                    /*!< PWM mode 1                             */
+#define TIM_OCMODE_PWM2                     (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0) /*!< PWM mode 2                             */
+#define TIM_OCMODE_FORCED_ACTIVE            (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_0)                    /*!< Force active level                     */
+#define TIM_OCMODE_FORCED_INACTIVE          TIM_CCMR1_OC1M_2                                         /*!< Force inactive level					 */
+
+
+/** @defgroup TIM_Output_Compare_Polarity TIM Output Compare Polarity
+  * @{
+  */
+#define TIM_OCPOLARITY_HIGH                0x00000000U                          /*!< Capture/Compare output polarity  */
+#define TIM_OCPOLARITY_LOW                 TIM_CCER_CC1P                        /*!< Capture/Compare output polarity  */
+
+
+/** @defgroup TIM_Channel TIM Channel
+  * @{
+  */
+#define TIM_CHANNEL_1                      0x00000000U                          /*!< Capture/compare channel 1 identifier      */
+#define TIM_CHANNEL_2                      0x00000004U                          /*!< Capture/compare channel 2 identifier      */
+#define TIM_CHANNEL_3                      0x00000008U                          /*!< Capture/compare channel 3 identifier      */
+#define TIM_CHANNEL_4                      0x0000000CU                          /*!< Capture/compare channel 4 identifier      */
+#define TIM_CHANNEL_ALL                    0x0000003CU                          /*!< Global Capture/compare channel identifier  */
+
+
 /**************************************************************************************************************
  * 																											  *
  * 												User Macro Definition										  *
@@ -165,7 +195,10 @@ typedef struct
  **************************************************************************************************************/
 
 void TIM_BaseInit(TIM_HandleTypeDef *pTIMHandle);
-void TIM_GPIOInit(TIM_TypeDef *TIMx);
+void TIM_LowInit(TIM_TypeDef *TIMx);
 void TIM_PeripheralClockControl(TIM_TypeDef *TIMx, uint8_t En_or_Di);
+void TIM_PWM_ConfigChannel(TIM_HandleTypeDef *pTIMHandle, TIM_OC_InitTypeDef *sConfig, uint32_t Channel);
+void TIM_PWM_Start(TIM_HandleTypeDef *pTIMHandle, uint32_t Channel);
+
 
 #endif /* INC_STM32F103XX_TIM_DRIVER_H_ */

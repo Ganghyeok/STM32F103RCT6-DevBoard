@@ -17,71 +17,57 @@
  ******************************************************************************
  */
 
+/*
+ *  TIM1_CH1 : PA8
+ *  TIM1_CH2 : PA9
+ *  TIM1_CH3 : PA10
+ *  TIM1_CH4 : PA11
+ *  -> Output Compare channel -> AF Push-Pull
+ */
+
+
 #include "stm32f103xx.h"
 
 
 void GPIO_LEDInit(GPIO_HandleTypeDef *pGPIOHandle);
 void USART1_Init(UART_HandleTypeDef *pUSARTHandle);
+void TIM1_Init(TIM_HandleTypeDef *pTIMHandle);
 
 UART_HandleTypeDef USART1Handle;
-char str1[15] = "Hello World!\n\r";
-char str2[17] = "VAPALUX_Clever\n\r";
 TIM_HandleTypeDef TIMHandle;
+
+//char str1[15] = "Hello World!\n\r";
+//char str2[17] = "VAPALUX_Clever\n\r";
+
 
 int main(void)
 {
-	GPIO_HandleTypeDef GPIOHandle;
-
-	memset(&GPIOHandle, 0, sizeof(GPIOHandle));
-	memset(&USART1Handle, 0, sizeof(USART1Handle));
+	//memset(&USART1Handle, 0, sizeof(USART1Handle));
 
 	SystemClock_Config(SYSCLK_FREQ_72MHZ);		// Other SYSCLK options are available
 
-	// GPIO Initialization for Button(PA0)
-	GPIO_LEDInit(&GPIOHandle);
-
 	// 1. Low level initialization of UART with GPIO clock enable
-	USART_LowInit(USART1);
+	//USART_LowInit(USART1);
 
 	// 2. UART initialization with UART Clock enable
-	USART1_Init(&USART1Handle);
+	//USART1_Init(&USART1Handle);
 
-	NVIC_IRQConfig(IRQ_NO_USART1, NVIC_PRIOR_8, ENABLE);
+	//NVIC_IRQConfig(IRQ_NO_USART1, NVIC_PRIOR_8, ENABLE);
 
 	Delay_ms(10);
 
 	/* ---------------------------------------------------------------------------- */
 
-
 	memset(&TIMHandle, 0, sizeof(TIMHandle));
 
-	// TIM Init Structure config
-	TIMHandle.Instance = TIM6;
-	TIMHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
-	TIMHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV4;
-	TIMHandle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-	TIMHandle.Init.Prescaler = 59999;  //   72MHz / (59999 + 1) = 1200Hz
-	TIMHandle.Init.Period = 599;  //   1200 / (599 + 1) = 2Hz
-	TIMHandle.Init.RepetitionCounter = 0;
+	TIM1_Init(&TIMHandle);
 
-	// TIM Base Initialization
-	TIM_BaseInit(&TIMHandle);
+	TIM_PWM_Start(&TIMHandle, TIM_CHANNEL_1);
+	TIM_PWM_Start(&TIMHandle, TIM_CHANNEL_2);
+	TIM_PWM_Start(&TIMHandle, TIM_CHANNEL_3);
+	TIM_PWM_Start(&TIMHandle, TIM_CHANNEL_4);
 
-	// TIM Lowlevel Init(GPIO, etc)
-
-	// NVIC Config and Enable TIM UEV Interrupt
-	NVIC_IRQConfig(IRQ_NO_TIM6, NVIC_PRIOR_5, ENABLE);
-
-	TIMHandle.Instance->DIER |= TIM_DIER_UIE;
-
-	// TIM Base Start
-	TIMHandle.Instance->CR1 |= TIM_CR1_CEN;
-
-
-	while(1)
-	{
-
-	}
+	while(1);
 }
 
 
@@ -112,8 +98,41 @@ void USART1_Init(UART_HandleTypeDef *pUSARTHandle)
 	USART_Init(pUSARTHandle);
 }
 
-/*
-	while(GPIO_ReadPin(GPIOA, GPIO_PIN_0));
-	Delay_ms(200);
-	USART_Transmit_IT(&USART1Handle, (uint8_t*)str2, strlen(str2));
- */
+
+void TIM1_Init(TIM_HandleTypeDef *pTIMHandle)
+{
+	// TIM Init Structure config
+	pTIMHandle->Instance = TIM1;
+	pTIMHandle->Init.Prescaler = (720-1);  //   72MHz / 720 = 100kHz
+	pTIMHandle->Init.Period = (10-1);  //   100kHz / 10 = 10kHz
+	// TIM Base Initialization
+	TIM_BaseInit(pTIMHandle);
+
+	// TIM Low level Initialization
+	TIM_LowInit(pTIMHandle->Instance);
+
+	TIM_OC_InitTypeDef TIM1_PWMConfig;
+	memset(&TIM1_PWMConfig, 0, sizeof(TIM1_PWMConfig));
+
+	// TIM_PWM_Config
+	TIM1_PWMConfig.OCMode = TIM_OCMODE_PWM1;
+	TIM1_PWMConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
+	TIM1_PWMConfig.Pulse = 2;	// 20% duty
+	TIM_PWM_ConfigChannel(pTIMHandle, &TIM1_PWMConfig, TIM_CHANNEL_1);
+
+	TIM1_PWMConfig.OCMode = TIM_OCMODE_PWM1;
+	TIM1_PWMConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
+	TIM1_PWMConfig.Pulse = 4;	// 40% duty
+	TIM_PWM_ConfigChannel(pTIMHandle, &TIM1_PWMConfig, TIM_CHANNEL_2);
+
+	TIM1_PWMConfig.OCMode = TIM_OCMODE_PWM1;
+	TIM1_PWMConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
+	TIM1_PWMConfig.Pulse = 6;	// 60% duty
+	TIM_PWM_ConfigChannel(pTIMHandle, &TIM1_PWMConfig, TIM_CHANNEL_3);
+
+	TIM1_PWMConfig.OCMode = TIM_OCMODE_PWM1;
+	TIM1_PWMConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
+	TIM1_PWMConfig.Pulse = 8;	// 80% duty
+	TIM_PWM_ConfigChannel(pTIMHandle, &TIM1_PWMConfig, TIM_CHANNEL_4);
+}
+
